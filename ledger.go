@@ -46,8 +46,5 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 
 // checks if severity is within the allowed bounds
 func (severity Severity) IsValid() bool {
-	if severity < INFO || severity > FATAL {
-		return false
-	}
-	return true
+	return severity >= INFO && severity <= FATAL
 }
