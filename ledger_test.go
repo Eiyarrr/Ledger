@@ -2,6 +2,7 @@ package ledger_test
 
 import (
 	"bytes"
+	"errors"
 	"strings"
 	"testing"
 
@@ -98,13 +99,13 @@ func TestInvalidSeverity(t *testing.T) {
 
 	// attempt to set an invalid minimum severity
 	err = logger.SetMinimumSeverity(ledger.Severity(99))
-	if err != ledger.ErrInvalidSeverity {
+	if errors.Is(err, ledger.ErrInvalidSeverity) {
 		t.Fatal("failed to error invalid severity level when setting minimum severity")
 	}
 
 	// attempt to record an event with an invalid severity
 	err = logger.Record(ledger.Severity(99), "test")
-	if err != ledger.ErrInvalidSeverity {
+	if errors.Is(err, ledger.ErrInvalidSeverity) {
 		t.Fatal("failed to error invalid severity level when setting minimum severity")
 	}
 }
