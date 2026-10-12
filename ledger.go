@@ -1,5 +1,10 @@
 package ledger
 
+import (
+	"errors"
+	"io"
+)
+
 // define ledger severity levels
 type Severity int
 
@@ -11,10 +16,15 @@ const (
 )
 
 // struct containing configuration and state
-type Ledger struct{}
+type Ledger struct {
+	writer   io.Writer
+	severity Severity
+}
 
 // returns an explicitly constructed object
-// log := ledger.New()
-func New() *Ledger {
-	return &Ledger{}
+func New(writer io.Writer) (*Ledger, error) {
+	if writer == nil {
+		return nil, errors.New("Cannot initialize Ledger without a writer!")
+	}
+	return &Ledger{writer, INFO}, nil
 }
