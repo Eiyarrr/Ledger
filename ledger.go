@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+// define ledger-specific errors
+var (
+	ErrInvalidSeverity = errors.New("invalid severity level")
+	ErrNoWriter = errors.New("cannot use ledger without a writer")
+)
+
 // define ledger severity levels
 type Severity int
 
@@ -33,7 +39,7 @@ type Entry struct {
 // returns an explicitly constructed object
 func New(writer io.Writer) (*Ledger, error) {
 	if writer == nil {
-		return nil, errors.New("cannot initialize ledger without a writer")
+		return nil, ErrNoWriter
 	}
 
 	ledger := Ledger{
@@ -50,7 +56,7 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 		ledger.minimumSeverity = severity
 		return nil
 	}
-	return errors.New("invalid severity level")
+	return ErrInvalidSeverity
 }
 
 // checks if severity is within the allowed bounds
@@ -61,7 +67,7 @@ func (severity Severity) IsValid() bool {
 // writes the message, severity, and any metadata to a file
 func (ledger *Ledger) Record(severity Severity, message string) error {
 	if !severity.IsValid() {
-		return errors.New("invalid severity level")
+		return ErrInvalidSeverity
 	}
 
 	// if severity is lower than the minimum severity, ignore
