@@ -1,7 +1,6 @@
 package ledger
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"time"
@@ -64,7 +63,7 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 	// convert severity to string
 	severityString := entry.Severity.String()
 	if severityString == "" {
-		return errors.New("unknown error converting severity to string")
+		return ErrUnknownSeverity
 	}
 
 	// format timestamp
