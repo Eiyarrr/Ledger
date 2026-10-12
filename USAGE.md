@@ -1,5 +1,6 @@
 ## Basic Example
 
+# CODE
 ```
 package main
 
@@ -54,4 +55,13 @@ func main() {
 	// note: the program can still run after a fatal log.
 	// Fatal simply means that the program can no longer recover and function as intended
 }
+```
+
+# OUTPUT
+```
+  ~/dev/test/ledger ❯ go run .
+[2026-10-12T12:48:31-07:00] | [INFO] | Ledger setup complete!
+[2026-10-12T12:48:31-07:00] | [WARN] | This is a warning.
+[2026-10-12T12:48:31-07:00] | [ERROR] | And this is an Error!
+[2026-10-12T12:48:31-07:00] | [FATAL] | Finish Him! (MK mentioned?)
 ```
