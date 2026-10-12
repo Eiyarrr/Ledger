@@ -77,16 +77,16 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 	}
 
 	// convert severity to string
-	severityString, err := entry.severity.String()
-	if err != nil {
-		return err
+	severityString := entry.severity.String()
+	if severityString == "" {
+		return errors.New("unknown error converting severity to string")
 	}
 
 	// convert entry into a usable line
-	line := fmt.Sprintf("[%s]\n [%s]\n %s\n", entry.timestamp, severityString, entry.message)
+	line := fmt.Sprintf("[%s] | [%s] | %s", entry.timestamp, severityString, entry.message)
 
 	// attempt to write the line
-	_, err = ledger.writer.Write([]byte(line))
+	_, err := ledger.writer.Write([]byte(line))
 	if err != nil {
 		return err
 	}
@@ -95,21 +95,17 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 }
 
 // string conversion of severity
-func (severity Severity) String() (string, error) {
-	if !severity.IsValid() {
-		return "", errors.New("invalid severity level")
-	}
-
+func (severity Severity) String() string {
 	switch severity {
 	case Info:
-		return "INFO", nil
+		return "INFO"
 	case Warn:
-		return "WARN", nil
+		return "WARN"
 	case Error:
-		return "ERROR", nil
+		return "ERROR"
 	case Fatal:
-		return "FATAL", nil
+		return "FATAL"
 	}
 
-	return "", errors.New("unknown error converting severity to string")
+	return ""
 }
