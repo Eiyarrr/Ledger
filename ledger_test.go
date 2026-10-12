@@ -149,3 +149,29 @@ func TestShortWrite(t *testing.T) {
 		t.Fatal("failed to error on short write")
 	}
 }
+
+// create a writer that doesn't write and only errors
+type ErrorWriter struct {
+	ErrorToWrite string
+}
+
+// implement Write() for the error ErrorWriter
+func (ew *ErrorWriter) Write(message []byte) (int, error) {
+	return 0, errors.New(ew.ErrorToWrite)
+}
+
+func TestErrorWrite(t *testing.T) {
+	// create writer that just errors on write
+	writer := &ErrorWriter{"testErr"}
+
+	// create ledger
+	scribe, err := ledger.New(writer)
+	if err != nil {
+		t.Fatal("failed to create new ledger")
+	}
+
+	err = scribe.Record(ledger.Info, "test")
+	if err == nil || err.Error() != errors.New("testErr").Error() {
+		t.Fatal("failed to error on errored write")
+	}
+}
