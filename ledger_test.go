@@ -16,25 +16,25 @@ func TestRecordAllSeverities(t *testing.T) {
 	// create ledger
 	scribe, err := ledger.New(buffer)
 	if err != nil {
-		t.Fatal("failed to create new ledger")
+		t.Fatalf("failed to create new ledger: %v", err)
 	}
 
 	// record various entries
 	err = scribe.Record(ledger.Info, "test")
 	if err != nil {
-		t.Fatal("failed to record on info", err)
+		t.Fatalf("failed to record on info: %v", err)
 	}
 	err = scribe.Record(ledger.Warn, "test")
 	if err != nil {
-		t.Fatal("failed to record on warn ", err)
+		t.Fatalf("failed to record on warn: %v", err)
 	}
 	err = scribe.Record(ledger.Error, "test")
 	if err != nil {
-		t.Fatal("failed to record on error ", err)
+		t.Fatalf("failed to record on error: %v", err)
 	}
 	err = scribe.Record(ledger.Fatal, "test")
 	if err != nil {
-		t.Fatal("failed to record on fatal ", err)
+		t.Fatalf("failed to record on fatal: %v", err)
 	}
 
 	// test entries
@@ -59,23 +59,23 @@ func TestSetMinimumSeverity(t *testing.T) {
 	// create ledger
 	scribe, err := ledger.New(buffer)
 	if err != nil {
-		t.Fatal("failed to create new ledger")
+		t.Fatalf("failed to create new ledger: %v", err)
 	}
 
 	// set ledger minimum severity to Warn
 	err = scribe.SetMinimumSeverity(ledger.Warn)
 	if err != nil {
-		t.Fatal("failed to set minimum severity to warn")
+		t.Fatalf("failed to set minimum severity to warn: %v", err)
 	}
 
 	// attempt to record an event with a lower severity and one that should pass
 	err = scribe.Record(ledger.Info, "test")
 	if err != nil {
-		t.Fatal("failed to record on info", err)
+		t.Fatalf("failed to record on info: %v", err)
 	}
 	err = scribe.Record(ledger.Warn, "test")
 	if err != nil {
-		t.Fatal("failed to record on warn ", err)
+		t.Fatalf("failed to record on warn: %v", err)
 	}
 
 	// check if the event was written regardless and that the others still write
@@ -94,19 +94,19 @@ func TestInvalidSeverity(t *testing.T) {
 	// create ledger
 	scribe, err := ledger.New(buffer)
 	if err != nil {
-		t.Fatal("failed to create new ledger")
+		t.Fatalf("failed to create new ledger: %v", err)
 	}
 
 	// attempt to set an invalid minimum severity
 	err = scribe.SetMinimumSeverity(ledger.Severity(99))
 	if !errors.Is(err, ledger.ErrInvalidSeverity) {
-		t.Fatal("failed to error invalid severity level when setting minimum severity")
+		t.Fatalf("expected ErrInvalidSeverity, got %v", err)
 	}
 
 	// attempt to record an event with an invalid severity
 	err = scribe.Record(ledger.Severity(99), "test")
 	if !errors.Is(err, ledger.ErrInvalidSeverity) {
-		t.Fatal("failed to error invalid severity level when recording")
+		t.Fatalf("expected ErrInvalidSeverity, got %v", err)
 	}
 }
 
@@ -114,7 +114,7 @@ func TestNoWriter(t *testing.T) {
 	// attempt to create ledger with a nil writer
 	_, err := ledger.New(nil)
 	if !errors.Is(err, ledger.ErrNoWriter) {
-		t.Fatal("failed to error nil writer")
+		t.Fatalf("expected ErrNoWriter, got %v", err)
 	}
 }
 
@@ -141,12 +141,12 @@ func TestShortWrite(t *testing.T) {
 	// create ledger
 	scribe, err := ledger.New(writer)
 	if err != nil {
-		t.Fatal("failed to create new ledger")
+		t.Fatalf("failed to create new ledger: %v", err)
 	}
 
 	err = scribe.Record(ledger.Info, "test, this is over 3 byte")
 	if !errors.Is(err, ledger.ErrShortWrite) {
-		t.Fatal("failed to error on short write")
+		t.Fatalf("expected ErrShortWrite, got %v", err)
 	}
 }
 
@@ -167,11 +167,11 @@ func TestErrorWrite(t *testing.T) {
 	// create ledger
 	scribe, err := ledger.New(writer)
 	if err != nil {
-		t.Fatal("failed to create new ledger")
+		t.Fatalf("failed to create new ledger: %v", err)
 	}
 
 	err = scribe.Record(ledger.Info, "test")
-	if err == nil || err.Error() != errors.New("testErr").Error() {
-		t.Fatal("failed to error on errored write")
+	if err == nil || err.Error() != "testErr" {
+		t.Fatalf("expected testErr, got %v", err)
 	}
 }
