@@ -1,7 +1,10 @@
 package ledger
 
-import "fmt"
+// struct containing configuration and state
+type Ledger struct{}
 
-func main() {
-	fmt.Println("Hello, World!")
+// returns an explicitly constructed object
+// log := ledger.New()
+func New() *Ledger {
+	return &Ledger{}
 }
