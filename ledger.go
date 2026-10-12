@@ -26,9 +26,9 @@ func New(writer io.Writer) (*Ledger, error) {
 	if writer == nil {
 		return nil, errors.New("cannot initialize ledger without a writer")
 	}
-	
+
 	ledger := Ledger{
-		writer: writer,
+		writer:           writer,
 		minimum_severity: INFO,
 	}
 	return &ledger, nil
@@ -36,6 +36,18 @@ func New(writer io.Writer) (*Ledger, error) {
 
 // allows changing of minimum severity within an existing Ledger
 // if severity is below the minimum, it is not logged
-func (ledger *Ledger) MinimumSeverity(severity Severity) {
-	ledger.minimum_severity = severity
+func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
+	if severity.IsValid() {
+		ledger.minimum_severity = severity
+		return nil
+	}
+	return errors.New("cannot set severity to a level outside the range")
+}
+
+// checks if severity is within the allowed bounds
+func (severity Severity) IsValid() bool {
+	if severity < INFO || severity > FATAL {
+		return false
+	}
+	return true
 }
