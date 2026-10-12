@@ -1,0 +1,7 @@
+ledger gets info
+
+accepts message, severity, etc.
+
+adds formatting and metadata (timestamp, process called, etc.)
+
+writes to stdout, file, etc.
