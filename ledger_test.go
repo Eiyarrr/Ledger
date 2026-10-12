@@ -85,3 +85,26 @@ func TestSetMinimumSeverity(t *testing.T) {
 		t.Fatal("record didn't properly write on warn")
 	}
 }
+
+func TestInvalidSeverity(t *testing.T) {
+	// create byte buffer (implements io.Writer but into memory)
+	buffer := bytes.NewBuffer([]byte(""))
+
+	// create ledger
+	logger, err := ledger.New(buffer)
+	if err != nil {
+		t.Fatal("failed to create new ledger")
+	}
+
+	// attempt to set an invalid minimum severity
+	err = logger.SetMinimumSeverity(ledger.Severity(99))
+	if err.Error() != "invalid severity level" {
+		t.Fatal("failed to error invalid severity level when setting minimum severity")
+	}
+
+	// attempt to record an event with an invalid severity
+	err = logger.Record(ledger.Severity(99), "test")
+	if err.Error() != "invalid severity level" {
+		t.Fatal("failed to error invalid severity level when setting minimum severity")
+	}
+}
