@@ -28,3 +28,10 @@ func New(writer io.Writer) (*Ledger, error) {
 	}
 	return &Ledger{writer, INFO}, nil
 }
+
+// allows changing of minimum severity within an existing Ledger
+// if severity is below the minimum, it is not logged
+func (ledger *Ledger) MinimumSeverity(severity Severity) {
+	ledger.severity = severity
+}
+
