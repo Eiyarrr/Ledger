@@ -79,7 +79,7 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 		return err
 	}
 	if bytesWritten != len(line) {
-		return io.ErrShortWrite
+		return ErrShortWrite
 	}
 
 	return nil

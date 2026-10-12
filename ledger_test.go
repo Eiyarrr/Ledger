@@ -67,7 +67,7 @@ func TestSetMinimumSeverity(t *testing.T) {
 	if err != nil {
 		t.Fatal("failed to set minimum severity to warn")
 	}
-	
+
 	// attempt to record an event with a lower severity and one that should pass
 	err = scribe.Record(ledger.Info, "test")
 	if err != nil {
@@ -115,5 +115,37 @@ func TestNoWriter(t *testing.T) {
 	_, err := ledger.New(nil)
 	if !errors.Is(err, ledger.ErrNoWriter) {
 		t.Fatal("failed to error nil writer")
+	}
+}
+
+// create a writer that writes only a certain number of bytes
+type ShortWriter struct {
+	MaxBytes int
+	Buffer   *bytes.Buffer
+}
+
+// implement the Write() func to the short writer
+func (sw *ShortWriter) Write(message []byte) (int, error) {
+	maxPos := min(sw.MaxBytes, len(message))
+
+	return sw.Buffer.Write(message[:maxPos])
+}
+
+func TestShortWrite(t *testing.T) {
+	// create byte buffer (implements io.Writer but into memory)
+	buffer := bytes.NewBuffer([]byte(""))
+
+	// create writer that writes for 3 bytes then silently fails
+	writer := &ShortWriter{MaxBytes: 3, Buffer: buffer}
+
+	// create ledger
+	scribe, err := ledger.New(writer)
+	if err != nil {
+		t.Fatal("failed to create new ledger")
+	}
+
+	err = scribe.Record(ledger.Info, "test, this is over 3 byte")
+	if !errors.Is(err, ledger.ErrShortWrite) {
+		t.Fatal("failed to error on short write")
 	}
 }
