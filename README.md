@@ -19,8 +19,8 @@ A minimal example of creating a Ledger instance and recording an entry:
 	// Initialize a new Ledger
 	scribe, err := ledger.New(writer)
 
-    // set the minimum severity to whatever you'd like (optional)
-    //err = scribe.SetMinimumSeverity(ledger.Warn)
+        // set the minimum severity to whatever you'd like (optional)
+        //err = scribe.SetMinimumSeverity(ledger.Warn)
 
 	// some example records
 	err = scribe.Record(ledger.Info, "Ledger setup complete!")       // typical program steps
