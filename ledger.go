@@ -1,7 +1,6 @@
 package ledger
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"io"
