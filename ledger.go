@@ -7,22 +7,6 @@ import (
 	"time"
 )
 
-// define ledger-specific errors
-var (
-	ErrInvalidSeverity = errors.New("invalid severity level")
-	ErrNoWriter = errors.New("cannot use ledger without a writer")
-)
-
-// define ledger severity levels
-type Severity int
-
-const (
-	Info  Severity = iota //0
-	Warn                  //1
-	Error                 //2
-	Fatal                 //3
-)
-
 // struct containing configuration and state
 type Ledger struct {
 	writer          io.Writer
@@ -57,11 +41,6 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 		return nil
 	}
 	return ErrInvalidSeverity
-}
-
-// checks if severity is within the allowed bounds
-func (severity Severity) IsValid() bool {
-	return severity >= Info && severity <= Fatal
 }
 
 // writes the message, severity, and any metadata to a file
@@ -104,20 +83,4 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 	}
 
 	return nil
-}
-
-// string conversion of severity
-func (severity Severity) String() string {
-	switch severity {
-	case Info:
-		return "INFO"
-	case Warn:
-		return "WARN"
-	case Error:
-		return "ERROR"
-	case Fatal:
-		return "FATAL"
-	}
-
-	return ""
 }
