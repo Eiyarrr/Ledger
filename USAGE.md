@@ -59,7 +59,7 @@ func main() {
 
 # OUTPUT
 ```
-  ~/dev/test/ledger ❯ go run .
+    ~/dev/test/ledger ❯ go run .
 [2026-10-12T12:48:31-07:00] | [INFO] | Ledger setup complete!
 [2026-10-12T12:48:31-07:00] | [WARN] | This is a warning.
 [2026-10-12T12:48:31-07:00] | [ERROR] | And this is an Error!
