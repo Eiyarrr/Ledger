@@ -9,16 +9,16 @@ import (
 type Severity int
 
 const (
-	INFO  Severity = iota //0
-	WARN                  //1
-	ERROR                 //2
-	FATAL                 //3
+	Info  Severity = iota //0
+	Warn                  //1
+	Error                 //2
+	Fatal                 //3
 )
 
 // struct containing configuration and state
 type Ledger struct {
 	writer           io.Writer
-	minimum_severity Severity
+	minimumSeverity Severity
 }
 
 // returns an explicitly constructed object
@@ -29,7 +29,7 @@ func New(writer io.Writer) (*Ledger, error) {
 
 	ledger := Ledger{
 		writer:           writer,
-		minimum_severity: INFO,
+		minimumSeverity: Info,
 	}
 	return &ledger, nil
 }
@@ -38,7 +38,7 @@ func New(writer io.Writer) (*Ledger, error) {
 // if severity is below the minimum, it is not logged
 func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 	if severity.IsValid() {
-		ledger.minimum_severity = severity
+		ledger.minimumSeverity = severity
 		return nil
 	}
 	return errors.New("cannot set severity to a level outside the range")
@@ -46,5 +46,5 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 
 // checks if severity is within the allowed bounds
 func (severity Severity) IsValid() bool {
-	return severity >= INFO && severity <= FATAL
+	return severity >= Info && severity <= Fatal
 }
