@@ -1,8 +1,11 @@
 package ledger
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"io"
+	"time"
 )
 
 // define ledger severity levels
@@ -17,8 +20,15 @@ const (
 
 // struct containing configuration and state
 type Ledger struct {
-	writer           io.Writer
+	writer          io.Writer
 	minimumSeverity Severity
+}
+
+// struct containing information that needs to be recorded
+type Entry struct {
+	timestamp time.Time
+	severity  Severity
+	message   string
 }
 
 // returns an explicitly constructed object
@@ -28,7 +38,7 @@ func New(writer io.Writer) (*Ledger, error) {
 	}
 
 	ledger := Ledger{
-		writer:           writer,
+		writer:          writer,
 		minimumSeverity: Info,
 	}
 	return &ledger, nil
@@ -41,10 +51,35 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 		ledger.minimumSeverity = severity
 		return nil
 	}
-	return errors.New("cannot set severity to a level outside the range")
+	return errors.New("invalid severity level")
 }
 
 // checks if severity is within the allowed bounds
 func (severity Severity) IsValid() bool {
 	return severity >= Info && severity <= Fatal
+}
+
+// writes the message, severity, and any metadata to a file
+func (ledger *Ledger) Record(severity Severity, message string) error {
+	if !severity.IsValid() {
+		return errors.New("invalid severity level")
+	}
+
+	// fill Entry struct with information on the event
+	entry := Entry{
+		timestamp: time.Now(),
+		severity:  severity,
+		message:   message,
+	}
+
+	// convert entry into a usable line
+	line := fmt.Sprintf("[%s] [%s] %s", entry.timestamp, entry.severity, entry.message)
+
+	// attempt to write the line
+	_, err := ledger.writer.Write([]byte(line))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
