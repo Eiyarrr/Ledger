@@ -12,7 +12,9 @@ Additionally, I intend to use this in my other projects from now on, so if you'r
 ## Usage
 A minimal example of creating a Ledger instance and recording an entry:
 
+```
 {usage example}
+```
 
 For a complete working example, including imports and error handling, please view [USAGE.md](USAGE.md).
 
