@@ -25,9 +25,9 @@ type Ledger struct {
 
 // struct containing information that needs to be recorded
 type Entry struct {
-	timestamp time.Time
-	severity  Severity
-	message   string
+	Timestamp time.Time
+	Severity  Severity
+	Message   string
 }
 
 // returns an explicitly constructed object
@@ -71,24 +71,30 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 
 	// fill Entry struct with information on the event
 	entry := Entry{
-		timestamp: time.Now(),
-		severity:  severity,
-		message:   message,
+		Timestamp: time.Now(),
+		Severity:  severity,
+		Message:   message,
 	}
 
 	// convert severity to string
-	severityString := entry.severity.String()
+	severityString := entry.Severity.String()
 	if severityString == "" {
 		return errors.New("unknown error converting severity to string")
 	}
 
+	// format timestamp
+	timestamp := entry.Timestamp.Format(time.RFC3339)
+
 	// convert entry into a usable line
-	line := fmt.Sprintf("[%s] | [%s] | %s", entry.timestamp, severityString, entry.message)
+	line := fmt.Sprintf("[%s] | [%s] | %s\n", timestamp, severityString, entry.Message)
 
 	// attempt to write the line
-	_, err := ledger.writer.Write([]byte(line))
+	bytesWritten, err := ledger.writer.Write([]byte(line))
 	if err != nil {
 		return err
+	}
+	if bytesWritten != len(line) {
+		return io.ErrShortWrite
 	}
 
 	return nil
