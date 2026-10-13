@@ -1,0 +1,2 @@
+optional writing on specific intervals to ensure logging is still functional
+log rotations to delete old logs
