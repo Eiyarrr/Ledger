@@ -3,6 +3,8 @@ Ledger is a logging library designed around what I believe a logger should do.
 I created it because logging is an important part of any project and I was genuinely interested in learning more. It's still a work in progress, and I intend to improve it over time.
 Additionally, I intend to use this in my other projects from now on, so if you're here from one of those... Hey, hope you're doing great!
 
+*Ledger is under the MIT License, for more information, see [LICENSE](LICENSE)*
+
 ## Features
 - **Custom Writers**: Ledger accepts any writer that implements Go's `io.Writer` interface.
 - **Error Handling**: Ledger returns errors from failed operations and provides its own exported errors for conditions that occur within Ledger itself. These can all be checked using `errors.Is` if necessary.
