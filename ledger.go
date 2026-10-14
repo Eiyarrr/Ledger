@@ -19,7 +19,8 @@ type entry struct {
 	message   string
 }
 
-// returns an explicitly constructed object
+// New() creates a Ledger that writes to writer.
+// It returns ErrNoWriter if the writer is nil.
 func New(writer io.Writer) (*Ledger, error) {
 	if writer == nil {
 		return nil, ErrNoWriter
@@ -32,8 +33,8 @@ func New(writer io.Writer) (*Ledger, error) {
 	return &ledger, nil
 }
 
-// allows changing of minimum severity within an existing Ledger
-// if severity is below the minimum, it is not logged
+// SetMinimumSeverity() changes the Ledger.minimumSeverity field.
+// If the severity of a Record() call is below Ledger.minimumSeverity, it is ignored.
 func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 	if severity.IsValid() {
 		ledger.minimumSeverity = severity
@@ -42,7 +43,7 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 	return ErrInvalidSeverity
 }
 
-// writes the message, severity, and any metadata to a file
+// Record() writes into the Ledger.writer the timestamp, severity, and message.
 func (ledger *Ledger) Record(severity Severity, message string) error {
 	if !severity.IsValid() {
 		return ErrInvalidSeverity

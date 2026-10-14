@@ -16,7 +16,7 @@ func main() {
 	// Create a writer that implements io.Writer
 	writer := os.Stdout
 
-	// Initialize a new Ledger
+	// Initialize a new Ledger and handle error
 	scribe, err := ledger.New(writer)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -24,14 +24,14 @@ func main() {
 	}
 
 	/*
-		// set the minimum severity to whatever you'd like (optional)
+		// set the minimum severity to whatever you'd like (optional) and handle error
 		err = scribe.SetMinimumSeverity(ledger.Warn)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
 	*/
 
-	// some example records
+	// some example records with error handling
 	err = scribe.Record(ledger.Info, "Ledger setup complete!")       // typical program steps
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

@@ -9,6 +9,8 @@ Additionally, I intend to use this in my other projects from now on, so if you'r
 - **Severity Filtering**: Entries below the minimum severity are discarded (by default, everything is recorded).
 - **Timestamps**: Every entry includes a timestamp in RFC 3339 formatting.
 
+*Note: SetMinimumSeverity() does not yet contain concurrency; if running with concurrent calls, ensure the caller provides syncronization if required for your program.*
+
 ## Usage
 A minimal example of creating a Ledger instance and recording an entry:
 
