@@ -1,5 +1,5 @@
 /*
-Ledger is a simple Golang Logging library.
+Ledger provides a simple logging library.
 */
 
 package ledger
@@ -10,7 +10,9 @@ import (
 	"time"
 )
 
-// struct containing configuration and state
+/*
+Ledger contains the information of the writer and minimum severity that will be recorded.
+*/
 type Ledger struct {
 	writer          io.Writer
 	minimumSeverity Severity
@@ -23,8 +25,11 @@ type entry struct {
 	message   string
 }
 
-// New() creates a Ledger that writes to writer.
-// It returns ErrNoWriter if the writer is nil.
+/*
+New creates a Ledger that writes to writer
+with the minimum severity set to Info by default.
+It returns ErrNoWriter if the writer is nil.
+*/
 func New(writer io.Writer) (*Ledger, error) {
 	if writer == nil {
 		return nil, ErrNoWriter
@@ -37,8 +42,11 @@ func New(writer io.Writer) (*Ledger, error) {
 	return &ledger, nil
 }
 
-// SetMinimumSeverity() changes the Ledger.minimumSeverity field.
-// If the severity of a Record() call is below Ledger.minimumSeverity, it is ignored.
+/*
+SetMinimumSeverity sets the minimum severity a Ledger will record.
+It returns ErrInvalidSeverity if the severity is invalid and
+leaves the existing minimum severity unchanged
+*/
 func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 	if severity.IsValid() {
 		ledger.minimumSeverity = severity
@@ -47,7 +55,12 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 	return ErrInvalidSeverity
 }
 
-// Record() writes into the Ledger.writer the timestamp, severity, and message.
+/*
+Record writes a timestamped log at a specified severity level.
+Messages below the minimum severity are ignored and no error is returned.
+It returns ErrInvalidSeverity if the severity is invalid and returns
+an error from the writer if writing has failed.
+*/
 func (ledger *Ledger) Record(severity Severity, message string) error {
 	if !severity.IsValid() {
 		return ErrInvalidSeverity
