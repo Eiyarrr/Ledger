@@ -66,31 +66,23 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 		return ErrInvalidSeverity
 	}
 
-	// if severity is lower than the minimum severity, ignore
 	if severity < ledger.minimumSeverity {
 		return nil
 	}
 
-	// fill Entry struct with information on the event
 	entry := entry{
 		timestamp: time.Now(),
 		severity:  severity,
 		message:   message,
 	}
 
-	// convert severity to string
 	severityString := entry.severity.String()
 	if severityString == "" {
 		return errUnknownSeverity
 	}
-
-	// format timestamp
 	timestamp := entry.timestamp.Format(time.RFC3339)
-
-	// convert entry into a usable line
 	line := fmt.Sprintf("[%s] | [%s] | %s\n", timestamp, severityString, entry.message)
 
-	// attempt to write the line
 	bytesWritten, err := ledger.writer.Write([]byte(line))
 	if err != nil {
 		return err

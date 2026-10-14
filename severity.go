@@ -10,17 +10,17 @@ Predefined severity levels, ordered from least to most severe.
 */
 const (
 	// Info represents routine program events.
-	Info  Severity = iota //0
+	Info Severity = iota
 
 	// Warn represents unusual conditions without significant issues.
-	Warn                  //1
+	Warn
 
 	// Error represents a problem that affects normal operation.
-	Error                 //2
+	Error
 
 	// Fatal represents a serious condition that prevents the program
 	// from functioning as intended.
-	Fatal                 //3
+	Fatal
 )
 
 /*
