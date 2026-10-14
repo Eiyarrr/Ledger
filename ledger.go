@@ -11,7 +11,7 @@ import (
 )
 
 /*
-Ledger contains the information of the writer and minimum severity that will be recorded.
+Ledger manages logging output and the minimum severity to record.
 */
 type Ledger struct {
 	writer          io.Writer
@@ -58,8 +58,8 @@ func (ledger *Ledger) SetMinimumSeverity(severity Severity) error {
 /*
 Record writes a timestamped log at a specified severity level.
 Messages below the minimum severity are ignored and no error is returned.
-It returns ErrInvalidSeverity if the severity is invalid and returns
-an error from the writer if writing has failed.
+It returns ErrInvalidSeverity if the severity is invalid, ErrShortWrite if the
+writer writes fewer bytes than requested, or the writer's error if writing fails.
 */
 func (ledger *Ledger) Record(severity Severity, message string) error {
 	if !severity.IsValid() {
