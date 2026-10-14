@@ -1,3 +1,7 @@
+/*
+Ledger is a simple Golang Logging library.
+*/
+
 package ledger
 
 import (
@@ -64,7 +68,7 @@ func (ledger *Ledger) Record(severity Severity, message string) error {
 	// convert severity to string
 	severityString := entry.severity.String()
 	if severityString == "" {
-		return ErrUnknownSeverity
+		return errUnknownSeverity
 	}
 
 	// format timestamp
