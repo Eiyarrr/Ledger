@@ -109,7 +109,6 @@ func TestMinimumSeverityPreservation(t *testing.T) {
 		t.Fatalf("expected ErrInvalidSeverity, got %v", err)
 	}
 
-
 	// attempt to record an event with a lower severity and one that should pass
 	err = scribe.Record(ledger.Info, "test")
 	if err != nil {

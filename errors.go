@@ -13,10 +13,10 @@ var (
 	ErrInvalidSeverity = errors.New("invalid severity level")
 
 	// ErrNoWriter indicates that New was called with a nil writer.
-	ErrNoWriter        = errors.New("cannot use ledger without a writer")
+	ErrNoWriter = errors.New("cannot use ledger without a writer")
 
 	// ErrShortWrite indicates that a writer wrote fewer bytes than requested.
-	ErrShortWrite      = io.ErrShortWrite
+	ErrShortWrite = io.ErrShortWrite
 
 	// errUnknownSeverity indicates that there was an issue internally when converting severity to a string.
 	// This error is currently unreachable through normal API usage.
